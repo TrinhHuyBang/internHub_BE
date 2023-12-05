@@ -14,7 +14,6 @@ class JobPostings extends Model
         'business_id',
         'title',
         'description',
-        'location',
         'salary',
         'recruitment_number',
         'industry',
@@ -22,9 +21,7 @@ class JobPostings extends Model
         'internship_duration',
         'internship_method',
         'internship_type',
-        'positions_available',
         'is_closed',
-        'posting_date',
     ];
 
     protected $attributes = [

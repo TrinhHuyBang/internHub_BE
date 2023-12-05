@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('location',100)->nullable();
             $table->string('country',100)->nullable();
             $table->integer('employees_number');
+            $table->string('business_logo');
             $table->string('website',100)->nullable();
             $table->string('contact_email',100)->unique()->nullable();
             $table->timestamps();

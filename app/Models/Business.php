@@ -14,6 +14,7 @@ class Business extends Model
         'industry',
         'location',
         'country',
+        'business_logo',
         'employees_number',
         'website',
         'contact_email',

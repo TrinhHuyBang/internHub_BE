@@ -20,7 +20,6 @@ return new class extends Migration
             $table->foreign('business_id')->references('id')->on('business');
             $table->string('title');
             $table->text('description')->nullable();
-            $table->string('location', 100);
             $table->decimal('salary', 10, 1)->nullable();
             $table->integer('recruitment_number');
             $table->string('industry', 50)->nullable();	
@@ -28,9 +27,7 @@ return new class extends Migration
             $table->integer('internship_duration');
             $table->enum('internship_method', ['online', 'hybrid','offline'])->default('offline');
             $table->enum('internship_type', ['fulltime', 'parttime'])->default('fulltime');
-            $table->integer('positions_available')->default(0);
             $table->boolean('is_closed')->default(false);
-            $table->timestamp('posting_date');
             $table->timestamps();
         });
     }
