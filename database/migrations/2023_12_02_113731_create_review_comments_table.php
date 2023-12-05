@@ -20,7 +20,8 @@ return new class extends Migration
             $table->unsignedBigInteger('review_id');
             $table->foreign('review_id')->references('id')->on('reviews');
             $table->string('comment_text');
-            $table->timestamp('comment_date')->default(now());
+            $table->timestamp('comment_date');
+            $table->timestamps();
         });
     }
 

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->unsignedBigInteger('review_id');
             $table->foreign('review_id')->references('id')->on('reviews');
             $table->enum('reaction_type', ['like', 'dislike']);
+            $table->timestamps();
         });
     }
 

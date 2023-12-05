@@ -30,7 +30,8 @@ return new class extends Migration
             $table->enum('internship_type', ['fulltime', 'parttime'])->default('fulltime');
             $table->integer('positions_available')->default(0);
             $table->boolean('is_closed')->default(false);
-            $table->timestamp('posting_date')->default(now());
+            $table->timestamp('posting_date');
+            $table->timestamps();
         });
     }
 

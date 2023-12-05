@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('job_posting_id');
             $table->foreign('job_posting_id')->references('id')->on('job_postings');
             $table->string('url');
+            $table->timestamps();
         });
     }
 

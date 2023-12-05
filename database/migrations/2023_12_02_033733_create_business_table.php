@@ -22,7 +22,7 @@ return new class extends Migration
             $table->integer('employees_number');
             $table->string('website',100)->nullable();
             $table->string('contact_email',100)->unique()->nullable();
-            $table->boolean('is_trusted')->default(false);
+            $table->timestamps();
         });
     }
 
