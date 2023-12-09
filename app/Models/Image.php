@@ -11,6 +11,6 @@ class Image extends Model
 
     protected $fillable = [
         'job_posting_id',
-        'url',
+        'url'
     ];
 }

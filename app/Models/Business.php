@@ -14,11 +14,13 @@ class Business extends Model
         'industry',
         'location',
         'country',
+        'province',
         'business_logo',
         'employees_number',
         'website',
         'contact_email',
     ];
 
+    protected $table = 'business';
     
 }

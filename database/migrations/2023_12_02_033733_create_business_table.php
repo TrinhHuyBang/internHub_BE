@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('industry',50)->nullable();
             $table->string('location',100)->nullable();
             $table->string('country',100)->nullable();
+            $table->string('province',100)->nullable();
             $table->integer('employees_number');
             $table->string('business_logo');
             $table->string('website',100)->nullable();
