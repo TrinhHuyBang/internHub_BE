@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Business;
 use App\Models\JobPosting;
 use Illuminate\Http\Request;
 
@@ -18,38 +19,32 @@ class SearchController extends Controller
         $business_name = $request->get('business_name'); // tên công ty
         $internship_type = $request->get('internship_type'); // hình thức part/fulltime
         $status = $request->get('status'); // trang thái tuyển
-
-        // $jobs = JobPosting::all();
-        // foreach($jobs as $job) {
-        //     $business_id = $job->business_id;
-        //     $job->business_name = Business::where('id', $business_id)->first()->name;
-        // }
-        if ($province !== 'all') {
-            $jobs = JobPosting::where('province', 'LIKE', '%' . $province . '%');
-        }
+        $filter = $request->get('filter'); // trang thái sắp xếp theo thứ tự 1 2 3 4
+        $jobs = JobPosting::query();
         if ($salary !== 'all') {
             switch ($salary) {
                 case '1':
-                    $jobs = $jobs->where('salary', '<', 2000000);
+                    $jobs = $jobs->where('salary', '<', 2000000.0);
                     break;
                 case '2':
-                    $jobs = $jobs->whereBetween('salary', [2000000, 4000000]);
+                    $jobs = $jobs->whereBetween('salary', [2000000.0, 4000000.0]);
                     break;
                 case '3':
-                    $jobs = $jobs->whereBetween('salary', [4000000, 6000000]);
+                    $jobs = $jobs->whereBetween('salary', [4000000.0, 6000000.0]);
                     break;
                 case '4':
-                    $jobs = $jobs->whereBetween('salary', [6000000, 8000000]);
+                    $jobs = $jobs->whereBetween('salary', [6000000.0, 8000000.0]);
                     break;
                 default:
                     break;
             }
         }
+
         if ($industry !== 'all') {
-            $jobs = $jobs->where('industry', $industry);
+            $jobs = $jobs->where('industry', 'like', $industry);
         }
         if ($field !== 'all') {
-            $jobs = $jobs->where('field', $field);
+            $jobs = $jobs->where('field', 'like', $field);
         }
         if ($internship_duration !== 'all') {
             switch ($internship_duration) {
@@ -66,6 +61,7 @@ class SearchController extends Controller
                     $jobs = $jobs->whereBetween('internship_duration', [4, 6]);
                     break;
                 default:
+                    $jobs = $jobs->whereBetween('internship_duration', '>', 6);
                     break;
             }
         }
@@ -77,17 +73,44 @@ class SearchController extends Controller
         }
         if ($status !== 'all') {
             if ($status === '1') {
-                $jobs = $jobs->where('is_closed', true);
+                $jobs = $jobs->where('is_closed', 1);
             } else {
-                $jobs = $jobs->where('is_closed', false);
+                $jobs = $jobs->where('is_closed', 0);
             }
         }
         if ($business_name !== 'all') {
-            $jobs->join('business', 'job_postings.business_id', '=', 'business.id')
-                ->where('business.name', 'LIKE', '%' . $business_name . '%');
+            $business_ids = Business::where('name', 'LIKE', '%' . $business_name . '%')->pluck('id');
+            $jobs = $jobs->whereIn('business_id', $business_ids);
+        }
+        if ($province !== 'all') {
+            $business_ids = Business::where('province', $province)->pluck('id');
+            $jobs = $jobs->whereIn('business_id', $business_ids);
+        }
+        switch ($filter) {
+            case '1':
+                $jobs = $jobs->orderBy('created_at', 'desc');
+                break;
+            case '2':
+                $jobs = $jobs->orderBy('updated_at', 'desc');
+                break;
+            case '3':
+                $jobs = $jobs->orderBy('salary', 'desc');
+                break;
+            case '4':
+                $jobs = $jobs->orderBy('recruitment_number', 'desc');
+                break;
+            default:
+
+                break;
         }
 
         $jobs = $jobs->get();
+        foreach ($jobs as $job) {
+            $business_id = $job->business_id;
+            $job->business_name = Business::where('id', $business_id)->first()->name;
+            $job->province = Business::where('id', $business_id)->first()->province;
+            $job->location = Business::where('id', $business_id)->first()->location;
+        }
         return $jobs;
     }
 }
