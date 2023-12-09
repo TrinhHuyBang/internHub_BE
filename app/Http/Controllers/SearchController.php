@@ -18,7 +18,7 @@ class SearchController extends Controller
         $internship_method = $request->get('internship_method'); // phương thức thực tập(on/off)
         $business_name = $request->get('business_name'); // tên công ty
         $internship_type = $request->get('internship_type'); // hình thức part/fulltime
-        $status = $request->get('status'); // trang thái tuyển
+        // $status = $request->get('status'); // trang thái tuyển
         $filter = $request->get('filter'); // trang thái sắp xếp theo thứ tự 1 2 3 4
         $jobs = JobPosting::query();
         if ($salary !== 'all') {
@@ -71,13 +71,13 @@ class SearchController extends Controller
         if ($internship_type !== 'all') {
             $jobs = $jobs->where('internship_type', $internship_type);
         }
-        if ($status !== 'all') {
-            if ($status === '1') {
-                $jobs = $jobs->where('is_closed', 1);
-            } else {
-                $jobs = $jobs->where('is_closed', 0);
-            }
-        }
+        // if ($status !== 'all') {
+        //     if ($status === '1') {
+        //         $jobs = $jobs->where('is_closed', 1);
+        //     } else {
+        //         $jobs = $jobs->where('is_closed', 0);
+        //     }
+        // }
         if ($business_name !== 'all') {
             $business_ids = Business::where('name', 'LIKE', '%' . $business_name . '%')->pluck('id');
             $jobs = $jobs->whereIn('business_id', $business_ids);
