@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name',100);
             $table->string('industry',50)->nullable();
-            $table->string('location',100)->nullable();
+            $table->string('location')->nullable();
             $table->string('country',100)->nullable();
             $table->string('province',100)->nullable();
             $table->integer('employees_number');
