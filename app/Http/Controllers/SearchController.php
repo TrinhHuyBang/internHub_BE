@@ -12,9 +12,13 @@ class SearchController extends Controller
     {
         $province = $request->get('province'); // tỉnh
         $salary = $request->get('salary'); //lương
+        $salary_start = $request->get('salary_start'); //lương
+        $salary_end = $request->get('salary_end'); //lương
         $industry = $request->get('industry'); //ngành
         $field = $request->get('field'); //lĩnh vực
         $internship_duration = $request->get('internship_duration'); //thời gian thực tập
+        $internship_duration_start = $request->get('internship_duration_start'); //thời gian thực tập
+        $internship_duration_end = $request->get('internship_duration_end'); //thời gian thực tập
         $internship_method = $request->get('internship_method'); // phương thức thực tập(on/off)
         $business_name = $request->get('business_name'); // tên công ty
         $internship_type = $request->get('internship_type'); // hình thức part/fulltime
@@ -36,6 +40,7 @@ class SearchController extends Controller
                     $jobs = $jobs->whereBetween('salary', [6000000.0, 8000000.0]);
                     break;
                 default:
+                    $jobs = $jobs->whereBetween('salary', [$salary_start, $salary_end]);
                     break;
             }
         }
@@ -61,7 +66,7 @@ class SearchController extends Controller
                     $jobs = $jobs->whereBetween('internship_duration', [4, 6]);
                     break;
                 default:
-                    $jobs = $jobs->whereBetween('internship_duration', '>', 6);
+                    $jobs = $jobs->whereBetween('internship_duration', [$internship_duration_start, $internship_duration_end]);
                     break;
             }
         }
