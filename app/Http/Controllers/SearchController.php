@@ -11,7 +11,7 @@ class SearchController extends Controller
     public function searchJob(Request $request)
     {
         $province = $request->get('province'); // tỉnh
-        $salary = $request->get('salary'); //lương
+        // $salary = $request->get('salary'); //lương
         $salary_start = $request->get('salary_start'); //lương
         $salary_end = $request->get('salary_end'); //lương
         $industry = $request->get('industry'); //ngành
@@ -25,23 +25,16 @@ class SearchController extends Controller
         // $status = $request->get('status'); // trang thái tuyển
         $filter = $request->get('filter'); // trang thái sắp xếp theo thứ tự 1 2 3 4
         $jobs = JobPosting::query();
-        if ($salary !== 'all') {
-            switch ($salary) {
-                case '1':
-                    $jobs = $jobs->where('salary', '<', 2000000.0);
-                    break;
-                case '2':
-                    $jobs = $jobs->whereBetween('salary', [2000000.0, 4000000.0]);
-                    break;
-                case '3':
-                    $jobs = $jobs->whereBetween('salary', [4000000.0, 6000000.0]);
-                    break;
-                case '4':
-                    $jobs = $jobs->whereBetween('salary', [6000000.0, 8000000.0]);
-                    break;
-                default:
-                    $jobs = $jobs->whereBetween('salary', [$salary_start, $salary_end]);
-                    break;
+        if ($salary_start === 'all' && $salary_end === 'all') {
+        } else {
+            if ($salary_start === '-1' && $salary_end === '-1') {
+                $jobs = $jobs->where('salary', null);
+            } else {
+                if ($salary_start === '10' && $salary_end === 'all') {
+                    $jobs = $jobs->where('salary', '>', 10);
+                } else {
+                    $jobs = $jobs->where('salary', '>=', $salary_start)->where('salary', '<', $salary_end);
+                }
             }
         }
 
@@ -108,7 +101,7 @@ class SearchController extends Controller
 
                 break;
         }
-
+        $jobs = $jobs->where('is_closed', 0);
         $jobs = $jobs->get();
         foreach ($jobs as $job) {
             $business_id = $job->business_id;
