@@ -96,9 +96,11 @@ class SearchController extends Controller
         $jobs = $jobs->get();
         foreach ($jobs as $job) {
             $business_id = $job->business_id;
-            $job->business_name = Business::where('id', $business_id)->first()->name;
-            $job->province = Business::where('id', $business_id)->first()->province;
-            $job->location = Business::where('id', $business_id)->first()->location;
+            $business = Business::where('id', $business_id)->first();
+            $job->business_name = $business->name;
+            $job->province = $business->province;
+            $job->location = $business->location;
+            $job->business_logo = $business->business_logo;
         }
         return $jobs;
     }
