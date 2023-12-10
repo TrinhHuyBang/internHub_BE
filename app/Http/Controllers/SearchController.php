@@ -16,7 +16,6 @@ class SearchController extends Controller
         $salary_end = $request->get('salary_end'); //lương
         $industry = $request->get('industry'); //ngành
         $field = $request->get('field'); //lĩnh vực
-        $internship_duration = $request->get('internship_duration'); //thời gian thực tập
         $internship_duration_start = $request->get('internship_duration_start'); //thời gian thực tập
         $internship_duration_end = $request->get('internship_duration_end'); //thời gian thực tập
         $internship_method = $request->get('internship_method'); // phương thức thực tập(on/off)
@@ -31,9 +30,9 @@ class SearchController extends Controller
                 $jobs = $jobs->where('salary', null);
             } else {
                 if ($salary_start === '10' && $salary_end === 'all') {
-                    $jobs = $jobs->where('salary', '>', 10);
+                    $jobs = $jobs->where('salary', '>', 10000000);
                 } else {
-                    $jobs = $jobs->where('salary', '>=', $salary_start)->where('salary', '<', $salary_end);
+                    $jobs = $jobs->where('salary', '>=', $salary_start * 1000000)->where('salary', '<', $salary_end * 1000000);
                 }
             }
         }
@@ -44,25 +43,17 @@ class SearchController extends Controller
         if ($field !== 'all') {
             $jobs = $jobs->where('field', 'like', $field);
         }
-        if ($internship_duration !== 'all') {
-            switch ($internship_duration) {
-                case '1':
-                    $jobs = $jobs->where('internship_duration', '<', 1);
-                    break;
-                case '2':
-                    $jobs = $jobs->whereBetween('internship_duration', [1, 2]);
-                    break;
-                case '3':
-                    $jobs = $jobs->whereBetween('internship_duration', [2, 4]);
-                    break;
-                case '4':
-                    $jobs = $jobs->whereBetween('internship_duration', [4, 6]);
-                    break;
-                default:
-                    $jobs = $jobs->whereBetween('internship_duration', [$internship_duration_start, $internship_duration_end]);
-                    break;
+
+        if ($internship_duration_start === 'all' && $internship_duration_end === 'all') {
+        } else {
+            if ($internship_duration_start === '6' && $internship_duration_end === 'all') {
+                $jobs = $jobs->where('internship_duration', '>', 6);
+            } else {
+                $jobs = $jobs->where('internship_duration', '>=', $internship_duration_start)
+                    ->where('internship_duration', '<', $internship_duration_end);
             }
         }
+
         if ($internship_method !== 'all') {
             $jobs = $jobs->where('internship_method', $internship_method);
         }
