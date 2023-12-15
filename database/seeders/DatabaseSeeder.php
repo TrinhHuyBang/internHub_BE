@@ -18,5 +18,9 @@ class DatabaseSeeder extends Seeder
         $this->call(UserSeeder::class);
         $this->call(BusinessSeeder::class);
         $this->call(JobPostingSeeder::class);
+        $this->call(ImageSeeder::class);
+        $this->call(ReviewSeeder::class);
+        $this->call(UserReviewReactionSeeder::class);
+        $this->call(ReviewChecklistRatingSeeder::class);
     }
 }

@@ -19,6 +19,8 @@ class Business extends Model
         'employees_number',
         'website',
         'contact_email',
+        'start_week_day',
+        'end_week_day'
     ];
 
     protected $table = 'business';
