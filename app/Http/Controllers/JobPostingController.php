@@ -12,10 +12,10 @@ class JobPostingController extends Controller
     public function getDetail($id) {
         $jobPosting = JobPosting::where('id', $id)->first();
         $business = Business::where('id', $jobPosting->business_id)->first();
-        $images = Image::where('job_posting_id', $jobPosting->id);
+        $images = Image::where('job_posting_id', $jobPosting->id)->get();
         $image_urls = [];
         foreach ($images as $image) {
-            array_push($image_urls, $image);
+            array_push($image_urls, $image->url);
         }
         $jobPosting['business'] = $business;
         $jobPosting['images'] = $image_urls;
