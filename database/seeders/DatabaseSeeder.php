@@ -22,5 +22,6 @@ class DatabaseSeeder extends Seeder
         $this->call(ReviewSeeder::class);
         $this->call(UserReviewReactionSeeder::class);
         $this->call(ReviewChecklistRatingSeeder::class);
+        $this->call(ReviewCommentSeeder::class);
     }
 }
