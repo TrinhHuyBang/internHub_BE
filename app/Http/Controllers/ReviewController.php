@@ -16,7 +16,7 @@ class ReviewController extends Controller
         $search = $request->get('search');
         $sort = $request->get('sort');
         $reviews = Review::where(function ($query) use ($search) {
-            if(count($search)) {
+            if(isset($search) && count($search)) {
                 foreach ($search as $term) {
                     $query->orWhere('title', 'like', "%{$term}%")
                         ->orWhere('review_text', 'like', "%{$term}%");
