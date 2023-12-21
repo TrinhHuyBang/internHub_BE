@@ -49,7 +49,7 @@ class ReviewController extends Controller
         $review->avatar = $user->avatar;
         $stars = ReviewChecklistRating::where('review_id', $review_id)->get();
         $review->review_check_list_ratings = $stars;
-        $review_comments = ReviewComment::where('review_id', $review_id)->get();
+        $review_comments = ReviewComment::where('review_id', $review_id)->orderBy('created_at', 'desc')->get();
         foreach ($review_comments as $review_comment) {
             $user = User::where('id', $review_comment->user_id)->first();
             $review_comment->user_name = $user->username;
