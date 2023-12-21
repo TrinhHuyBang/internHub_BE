@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\JobPostingController;
+use App\Http\Controllers\ReviewCommentController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UserReviewReactionController;
@@ -27,3 +28,4 @@ Route::get('/list-business', [BusinessController::class, 'list']);
 Route::get('/job-detail/{id}', [JobPostingController::class, 'getDetail']);
 Route::get('/review-search', [ReviewController::class, 'searchReview']);
 Route::match(['post', 'put'], '/review-reaction', [UserReviewReactionController::class, 'reaction']);
+Route::post('/create-comment', [ReviewCommentController::class, 'create']);
