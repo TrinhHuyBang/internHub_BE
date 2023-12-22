@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\JobResource;
 use App\Models\Business;
 use App\Models\JobPosting;
 use Illuminate\Http\Request;
@@ -103,5 +104,33 @@ class SearchController extends Controller
             $job->business_logo = $business->business_logo;
         }
         return $jobs;
+    }
+
+    public function getSimilarJob(Request $request) {
+        $job_id = $request->get('id');
+        $job = JobPosting::where('id', $job_id)->first();
+        $province = Business::where('id', $job->business_id)->first()->province;
+        $listJobs = JobPosting::where('id', '!=', $job_id)->where('is_closed', 0)->get();
+        foreach ($listJobs as $job_posting) {
+            $point = 0;
+            if($job_posting->industry == $job->industry) {
+                $point += 1;
+            }
+            if($job_posting->field == $job->field) {
+                $point += 1;
+            }
+            $business_id = $job_posting->business_id;
+            $business = Business::where('id', $business_id)->first();
+            $job_posting->business_name = $business->name;
+            $job_posting->province = $business->province;
+            $job_posting->location = $business->location;
+            $job_posting->business_logo = $business->business_logo;
+            if($job_posting->province == $province) {
+                $point += 1;
+            }
+            $job_posting->point = $point;
+        }
+        $listJobs = JobResource::collection($listJobs)->sortByDesc('point')->values()->all();
+        return $listJobs;
     }
 }
