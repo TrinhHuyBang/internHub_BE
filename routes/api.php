@@ -30,3 +30,4 @@ Route::get('/review-search', [ReviewController::class, 'searchReview']);
 Route::match(['post', 'put'], '/review-reaction', [UserReviewReactionController::class, 'reaction']);
 Route::post('/create-comment', [ReviewCommentController::class, 'create']);
 Route::get('/get-similar-job', [SearchController::class, 'getSimilarJob']);
+Route::get('/review-detail/{id}', [ReviewController::class, 'getReviewById']);
