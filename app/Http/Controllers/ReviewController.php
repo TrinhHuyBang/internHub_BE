@@ -16,28 +16,32 @@ class ReviewController extends Controller
     {
         $search = $request->get('search');
         $sort = $request->get('sort');
-        $reviews = Review::where(function ($query) use ($search) {
-            if (isset($search) && count($search)) {
-                foreach ($search as $term) {
-                    $query->orWhere('title', 'like', "%{$term}%")
-                        ->orWhere('review_text', 'like', "%{$term}%");
-                }
+        $reviews = Review::query();
+        if (isset($search) && count($search)) {
+            $reviewIds = Review::pluck('id')->toArray();
+            foreach ($search as $term) {
+                $reviewIds = Review::whereIn('id', $reviewIds)->where(function($query) use ($term){
+                    $query->where('title', 'like', "%{$term}%")->orWhere('review_text', 'like', "%{$term}%");
+                })->pluck('id')->toArray();
             }
-        });
+            $reviews = $reviews->whereIn('id', $reviewIds);
+        }
         $results = $reviews->get();
         $review_check_substring_ids = [];
         if(isset($search) && count($search)) {
             $review_check_substring_ids = $results->filter(function($review) use ($search) {
+                $num_total = 0;
                 foreach ($search as $item) {
                     if($this->isSubstring($review->title, $item) || $this->isSubstring($review->review_text, $item)){
-                        return $review;
+                        $num_total++;
                     };
                 }
+                return $num_total === count($search);
             })->pluck('id')->toArray();
         }
-        if(count($review_check_substring_ids)) {
-            $results = Review::whereIn('id', $review_check_substring_ids)->get();
-        }
+        
+        $results = Review::whereIn('id', $review_check_substring_ids)->get();
+
         if (count($results)) {
             foreach ($results as $review) {
                 $review['reviewer_name'] = User::where('id', $review->reviewer_id)->first()->username;
