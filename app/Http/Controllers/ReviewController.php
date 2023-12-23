@@ -39,8 +39,9 @@ class ReviewController extends Controller
                 return $num_total === count($search);
             })->pluck('id')->toArray();
         }
-        
-        $results = Review::whereIn('id', $review_check_substring_ids)->get();
+        if(isset($search) && count($search)) {
+            $results = Review::whereIn('id', $review_check_substring_ids)->get();
+        }
 
         if (count($results)) {
             foreach ($results as $review) {
