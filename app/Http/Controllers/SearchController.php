@@ -126,11 +126,14 @@ class SearchController extends Controller
             $job_posting->location = $business->location;
             $job_posting->business_logo = $business->business_logo;
             if($job_posting->province == $province) {
-                $point += 1;
+                $point += 0.5;
             }
             $job_posting->point = $point;
         }
-        $listJobs = JobResource::collection($listJobs)->sortByDesc('point')->values()->all();
+        $listJobs = JobResource::collection($listJobs)->sortBy([
+            ['point', 'desc'],
+            ['created_at', 'desc']
+        ])->values()->all();
         return $listJobs;
     }
 }

@@ -24,6 +24,19 @@ class ReviewController extends Controller
             }
         });
         $results = $reviews->get();
+        $review_check_substring_ids = [];
+        if(isset($search) && count($search)) {
+            $review_check_substring_ids = $results->filter(function($review) use ($search) {
+                foreach ($search as $item) {
+                    if($this->isSubstring($review->title, $item) || $this->isSubstring($review->review_text, $item)){
+                        return $review;
+                    };
+                }
+            })->pluck('id')->toArray();
+        }
+        if(count($review_check_substring_ids)) {
+            $results = Review::whereIn('id', $review_check_substring_ids)->get();
+        }
         if(count($results)) {
             foreach ($results as $review) {
                 $review['reviewer_name'] = User::where('id', $review->reviewer_id)->first()->username;
