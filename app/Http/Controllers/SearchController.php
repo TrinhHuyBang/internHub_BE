@@ -27,11 +27,11 @@ class SearchController extends Controller
         $jobs = JobPosting::query();
         if ($salary_start === 'all' && $salary_end === 'all') {
         } else {
-            if ($salary_start === '-1' && $salary_end === '-1') {
+            if ($salary_start === -1 && $salary_end === -1) {
                 $jobs = $jobs->where('salary', null);
             } else {
-                if ($salary_start === '10' && $salary_end === 'all') {
-                    $jobs = $jobs->where('salary', '>', 10000000);
+                if ($salary_start === 10 && $salary_end === 'all') {
+                    $jobs = $jobs->where('salary', '>=', 10000000);
                 } else {
                     $jobs = $jobs->where('salary', '>=', $salary_start * 1000000)->where('salary', '<', $salary_end * 1000000);
                 }
@@ -47,8 +47,8 @@ class SearchController extends Controller
 
         if ($internship_duration_start === 'all' && $internship_duration_end === 'all') {
         } else {
-            if ($internship_duration_start === '6' && $internship_duration_end === 'all') {
-                $jobs = $jobs->where('internship_duration', '>', 6);
+            if ($internship_duration_start === 6 && $internship_duration_end === 'all') {
+                $jobs = $jobs->where('internship_duration', '>=', 6);
             } else {
                 $jobs = $jobs->where('internship_duration', '>=', $internship_duration_start)
                     ->where('internship_duration', '<', $internship_duration_end);
