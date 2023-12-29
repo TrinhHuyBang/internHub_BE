@@ -76,6 +76,16 @@ class SearchController extends Controller
             $business_ids = Business::where('province', $province)->pluck('id');
             $jobs = $jobs->whereIn('business_id', $business_ids);
         }
+
+        $title = $request->get('title');
+        if ($title) {
+            $jobsObject = $jobs->get();
+            $jobsObjectMatchIds = $jobsObject->filter(function($job) use ($title) {
+                return $this->isSubstring($job->title, $title);
+            })->pluck('id')->toArray();
+            $jobs = $jobs->whereIn('id', $jobsObjectMatchIds);
+        }
+
         switch ($filter) {
             case '1':
                 $jobs = $jobs->orderBy('created_at', 'desc');
