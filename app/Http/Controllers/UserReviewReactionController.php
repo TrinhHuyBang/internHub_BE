@@ -32,6 +32,8 @@ class UserReviewReactionController extends Controller
             $dislike_count = UserReviewReaction::where('review_id', $review_id)->where('reaction_type', 'dislike')->count();
             $like_count = UserReviewReaction::where('review_id', $review_id)->where('reaction_type', 'like')->count();
             $result['count'] = $like_count - $dislike_count;
+            $result['like_count'] = $like_count;
+            $result['dislike_count'] = $dislike_count;
             return $result;
         } catch (Exception $e) {
             Log::info($e);
